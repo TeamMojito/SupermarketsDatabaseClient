@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractExcelReportsFromZip", "ExtractExcelReportsFromZip\ExtractExcelReportsFromZip.csproj", "{67E47F3D-C13E-4ACD-BFE8-CC37A87A8E37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupermarketsDatabaseClient", "SupermarketsDatabaseClient\SupermarketsDatabaseClient.csproj", "{8AFD17A3-171A-469D-B014-0A07736BD3C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{67E47F3D-C13E-4ACD-BFE8-CC37A87A8E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67E47F3D-C13E-4ACD-BFE8-CC37A87A8E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67E47F3D-C13E-4ACD-BFE8-CC37A87A8E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67E47F3D-C13E-4ACD-BFE8-CC37A87A8E37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AFD17A3-171A-469D-B014-0A07736BD3C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AFD17A3-171A-469D-B014-0A07736BD3C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AFD17A3-171A-469D-B014-0A07736BD3C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AFD17A3-171A-469D-B014-0A07736BD3C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
