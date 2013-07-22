@@ -8,8 +8,8 @@ namespace SupermarketsDatabaseClient
         static void Main(string[] args)
         {
             //ZipExtractor zipExtractor = new ZipExtractor(@"D:\Trash\Sample-Sales-Reports.zip");
-            //var directory = zipExtractor.ExtractContentTo(@"D:\Trash\Reports");
-            ExcelToMySqlParser excelToMySqlParser = new ExcelToMySqlParser(@"D:\Trash\Reports");
+            //var directory = zipExtractor.ExtractContentTo(@"D:\Trash\ExcelReports");
+            ExcelToMySqlParser excelToMySqlParser = new ExcelToMySqlParser(@"D:\Trash\ExcelReports");
             excelToMySqlParser.NemogaDaTiIzmislqImeSq();
         }
     }

@@ -30,7 +30,7 @@ namespace ExtractExcelReportsFromZip
             string[] files = Directory.GetFiles(directory);
             
             foreach (var file in files)
-            {
+            { 
                 string connectionString = string.Format(ExcelConnectionString, file);
                 OleDbConnection excelConnection = new OleDbConnection(connectionString);
 
@@ -38,26 +38,38 @@ namespace ExtractExcelReportsFromZip
 
                 using (excelConnection)
                 {
-                    OleDbCommand oleCmdSelect = new OleDbCommand("SELECT ProductId, Quantity FROM [Sales$B3:C3]", excelConnection);
+                    OleDbCommand oleCmdSelect = new OleDbCommand("SELECT * FROM [Sales$]", excelConnection);
+                    
+                    OleDbDataReader reader = oleCmdSelect.ExecuteReader();
+                    // Skip the table name
+                    reader.Read();
+                    // Skip the identifiers names
+                    reader.Read();
 
-                    //try
-                    //{
-                        OleDbDataReader reader = oleCmdSelect.ExecuteReader();
-                        while (reader.Read())
+                    while (reader.Read())
+                    {
+                        if (reader[0].ToString() == "Total sum:")
                         {
-                            Console.WriteLine("Enter");
-                            int name = int.Parse(reader["ProductID"].ToString());
-                            int score = int.Parse(reader["Quantity"].ToString());
-                            Console.WriteLine("{0} with scores {1}", name, score);
+                            break;
                         }
 
-                        reader.Close();
-                        
-                    //}
-                    //catch (Exception)
-                    //{
-                        
-                    //}
+                        if (reader[0].ToString() == "…")
+                        {
+                            continue;
+                        }
+
+                        string productId = reader[0].ToString();
+                        string quantity = reader[1].ToString();
+                        string unitPrice = reader[2].ToString();
+                        string sum = reader[3].ToString();
+
+                        Console.WriteLine("Product id: {0}", productId);
+                        Console.WriteLine("Quantity {0}", quantity);
+                        Console.WriteLine("Unit Price {0}", unitPrice);
+                        Console.WriteLine("Sum {0}", sum);
+                    }
+
+                    reader.Close();
                 }
             }
         }
