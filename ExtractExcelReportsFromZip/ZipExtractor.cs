@@ -25,6 +25,12 @@
             return directoryToExtract;
         }
 
+        public void RemoveExtractedDirectory(string directory)
+        {
+            Directory.Delete(directory, true);
+            Console.WriteLine("Directory is deleted");
+        }
+
         public string ExtractDirectory
         {
             get

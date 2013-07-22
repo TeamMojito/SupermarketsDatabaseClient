@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8AFD17A3-171A-469D-B014-0A07736BD3C5}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{67C3EF4E-9CD7-4539-9772-812C98A0D520}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SupermarketsDatabaseClient</RootNamespace>
-    <AssemblyName>SupermarketsDatabaseClient</AssemblyName>
+    <RootNamespace>MSSQLSupermarketEntityFramework</RootNamespace>
+    <AssemblyName>MSSQLSupermarketEntityFramework</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -39,35 +37,69 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Telerik.OpenAccess, Version=2013.2.702.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL" />
-    <Reference Include="Telerik.OpenAccess.35.Extensions, Version=2013.2.702.1, Culture=neutral, PublicKeyToken=7ce17eeaf1d59342, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Measure.cs">
+      <DependentUpon>SupermarketModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Product.cs">
+      <DependentUpon>SupermarketModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report.cs">
+      <DependentUpon>SupermarketModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SupermarketModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SupermarketModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SupermarketModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SupermarketModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SupermarketModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SupermarketModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Vendor.cs">
+      <DependentUpon>SupermarketModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <EntityDeploy Include="SupermarketModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SupermarketModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
     <None Include="packages.config" />
+    <None Include="SupermarketModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SupermarketModel.edmx</DependentUpon>
+      <LastGenOutput>SupermarketModel.Context.cs</LastGenOutput>
+    </None>
+    <None Include="SupermarketModel.edmx.diagram">
+      <DependentUpon>SupermarketModel.edmx</DependentUpon>
+    </None>
+    <None Include="SupermarketModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SupermarketModel.edmx</DependentUpon>
+      <LastGenOutput>SupermarketModel.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtractExcelReportsFromZip\ExtractExcelReportsFromZip.csproj">
-      <Project>{67e47f3d-c13e-4acd-bfe8-cc37a87a8e37}</Project>
-      <Name>ExtractExcelReportsFromZip</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MSSQLSupermarketEntityFramework\MSSQLSupermarketEntityFramework.csproj">
-      <Project>{67c3ef4e-9cd7-4539-9772-812c98a0d520}</Project>
-      <Name>MSSQLSupermarketEntityFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenAccessMySqlSupermarketEntityModel\OpenAccessMySqlSupermarketEntityModel.csproj">
-      <Project>{c50145e6-a244-4f1f-b41f-90d1925b4a00}</Project>
-      <Name>OpenAccessMySqlSupermarketEntityModel</Name>
-    </ProjectReference>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -77,5 +109,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Import Condition="Exists('$(MSBuildExtensionsPath)\OpenAccess.targets')" Project="$(MSBuildExtensionsPath)\OpenAccess.targets" />
 </Project>

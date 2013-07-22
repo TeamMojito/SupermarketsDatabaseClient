@@ -1,9 +1,10 @@
-﻿using System;
-using System.Data.OleDb;
-using System.IO;
-
-namespace ExtractExcelReportsFromZip
+﻿namespace ExtractExcelReportsFromZip
 {
+    using System;
+    using System.Data.OleDb;
+    using System.IO;
+    using MSSQLSupermarketEntityFramework;
+
     public class ExcelToMySqlParser
     {
         private string reportsDirectory;
@@ -14,13 +15,12 @@ namespace ExtractExcelReportsFromZip
             this.ReportsDirectory = reportsDirectory;
         }
 
-        public void NemogaDaTiIzmislqImeSq()
+        public void ReadFilesFromExcel()
         {
             string[] directories = Directory.GetDirectories(this.reportsDirectory);
 
             foreach (var directory in directories)
             {
-                Console.WriteLine(directory);
                 ReadExcelReport(directory);
             }
         }
@@ -31,8 +31,7 @@ namespace ExtractExcelReportsFromZip
             
             foreach (var file in files)
             { 
-                string connectionString = string.Format(ExcelConnectionString, file);
-                OleDbConnection excelConnection = new OleDbConnection(connectionString);
+                OleDbConnection excelConnection = new OleDbConnection(string.Format(ExcelConnectionString, file));
 
                 excelConnection.Open();
 
@@ -41,36 +40,51 @@ namespace ExtractExcelReportsFromZip
                     OleDbCommand oleCmdSelect = new OleDbCommand("SELECT * FROM [Sales$]", excelConnection);
                     
                     OleDbDataReader reader = oleCmdSelect.ExecuteReader();
+                    
                     // Skip the table name
                     reader.Read();
+                    string [] tokens = directory.Split('\\');
+                    DateTime reportDate = DateTime.Parse(tokens[tokens.Length - 1]);
+                    string supermarketName = reader[0].ToString();
                     // Skip the identifiers names
                     reader.Read();
 
                     while (reader.Read())
                     {
-                        if (reader[0].ToString() == "Total sum:")
+                        if (reader[0].ToString() == "…")
                         {
                             break;
                         }
 
-                        if (reader[0].ToString() == "…")
-                        {
-                            continue;
-                        }
+                        int productId = int.Parse(reader[0].ToString());
+                        int quantity = int.Parse(reader[1].ToString());
+                        decimal unitPrice = decimal.Parse(reader[2].ToString());
+                        decimal sum = decimal.Parse(reader[3].ToString());
 
-                        string productId = reader[0].ToString();
-                        string quantity = reader[1].ToString();
-                        string unitPrice = reader[2].ToString();
-                        string sum = reader[3].ToString();
-
-                        Console.WriteLine("Product id: {0}", productId);
-                        Console.WriteLine("Quantity {0}", quantity);
-                        Console.WriteLine("Unit Price {0}", unitPrice);
-                        Console.WriteLine("Sum {0}", sum);
+                        AddRecordToDatabase(productId, quantity, unitPrice, sum, reportDate, supermarketName);
                     }
 
                     reader.Close();
                 }
+            }
+        }
+
+        private void AddRecordToDatabase(int productId, int quantity, decimal unitPrice, decimal sum, DateTime reportDate, string supermarketName)
+        {
+            using (var supermarketEntities = new SupermarketEntities())
+            {
+                var report = new Report()
+                {
+                    ProductId = productId,
+                    Quantity = quantity,
+                    UnitPrice = unitPrice,
+                    Sum = sum,
+                    ReportDate = reportDate,
+                    Supermarket = supermarketName
+                };
+
+                supermarketEntities.Reports.Add(report);
+                supermarketEntities.SaveChanges();
             }
         }
 
