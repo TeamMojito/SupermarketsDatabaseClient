@@ -15,20 +15,20 @@
 
         public string ExtractContentTo(string directoryToExtract)
         {
-            if (!Directory.Exists(directoryToExtract))
+            if (Directory.Exists(directoryToExtract))
             {
-                Directory.CreateDirectory(directoryToExtract);
+                Directory.Delete(directoryToExtract, true);
             }
-
+            
+            Directory.CreateDirectory(directoryToExtract);
             ZipFile.ExtractToDirectory(this.ExtractDirectory, directoryToExtract);
 
             return directoryToExtract;
         }
-
+    
         public void RemoveExtractedDirectory(string directory)
         {
             Directory.Delete(directory, true);
-            Console.WriteLine("Directory is deleted");
         }
 
         public string ExtractDirectory
