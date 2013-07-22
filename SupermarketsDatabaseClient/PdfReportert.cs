@@ -9,6 +9,13 @@ namespace SupermarketsDatabaseClient
 
     public static class PdfReportert
     {
+        private enum TextAlign
+        {
+            Left = 0,
+            Center = 1,
+            Right = 2,
+        };
+
         public static void CreateReport()
         {
             string directoryCreating = "..\\..\\..\\SalesReports.pdf";
@@ -27,7 +34,8 @@ namespace SupermarketsDatabaseClient
                 //    new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK),
                 //    new Chunk("\n\n\nWhat kind of paper is the best for making paper airplanes?\n\n\n\n\n")); 
                 PdfPTable reportTable = new PdfPTable(5);
-                AddCellToTable(reportTable, "Aggregated Sales Report", 1, 5);
+
+                AddCellToTable(reportTable, "Aggregated Sales Report", TextAlign.Center, 5);
 
                 using (var supermarketEntities = new SupermarketEntities())
                 {
@@ -35,7 +43,8 @@ namespace SupermarketsDatabaseClient
                     var currentDate = reportsOrderedByDate.First().ReportDate;
                     decimal currentSum = 0;
                     decimal totalSum = 0;
-                    AddHeader(reportTable, currentDate);
+                    var headerColor = new BaseColor(217, 217, 217);
+                    AddHeader(reportTable, currentDate, headerColor);
                     // aligment  0 = left, 1 = center, 2 = right
 
                     foreach (var report in reportsOrderedByDate)
@@ -45,11 +54,10 @@ namespace SupermarketsDatabaseClient
                             AddFooter(reportTable, "Total sum for " + currentDate.ToString(), currentSum);
                             currentSum = 0;
                             currentDate = report.ReportDate;
-                            AddHeader(reportTable, currentDate);
+                            AddHeader(reportTable, currentDate, headerColor);
                         }
                         else
                         {
-
                             AddCellToTable(reportTable, report.Product.ProductName.ToString(), 0);
                             AddCellToTable(reportTable, report.Quantity.ToString(), 0);
                             AddCellToTable(reportTable, report.UnitPrice.ToString(), 0);
@@ -70,30 +78,30 @@ namespace SupermarketsDatabaseClient
 
         private static void AddFooter(PdfPTable reportTable, string cellInfo, decimal sum)
         {
-            AddCellToTable(reportTable, cellInfo, 2, 4);
-            AddCellToTable(reportTable, sum.ToString(), 2);
+            AddCellToTable(reportTable, cellInfo, TextAlign.Right, 4);
+            AddCellToTable(reportTable, sum.ToString(), TextAlign.Right);
         }
 
-        private static void AddHeader(PdfPTable reportTable, DateTime currentDate)
+        private static void AddHeader(PdfPTable reportTable, DateTime currentDate, BaseColor headerColor)
         {
-            AddCellToTable(reportTable, "Date: " + currentDate.ToString(), 0, 5);
-            AddCellToTable(reportTable, "Product", 0);
-            AddCellToTable(reportTable, "Quantity", 0);
-            AddCellToTable(reportTable, "Unit Price", 0);
-            AddCellToTable(reportTable, "Location ", 0);
-            AddCellToTable(reportTable, "Sum", 0);
+            AddCellToTable(table: reportTable, cellText: "Date: " + currentDate.ToString(), textAlingment: TextAlign.Left, colspan:5, cellColor:headerColor);
+            AddCellToTable(table: reportTable, cellText: "Product", textAlingment: TextAlign.Left, cellColor: headerColor);
+            AddCellToTable(table: reportTable, cellText: "Quantity", textAlingment: TextAlign.Left, cellColor: headerColor);
+            AddCellToTable(table: reportTable, cellText: "Unit Price", textAlingment: TextAlign.Left, cellColor: headerColor);
+            AddCellToTable(table: reportTable, cellText: "Location ", textAlingment: TextAlign.Left, cellColor: headerColor);
+            AddCellToTable(table: reportTable, cellText: "Sum", textAlingment: TextAlign.Left, cellColor: headerColor);
         }
 
-        private static void AddCellToTable(PdfPTable reportTable, string text, int aligment, int colspan = 1, bool isHeader = false)
+        private static void AddCellToTable(PdfPTable table, string cellText, TextAlign textAlingment, int colspan = 1, BaseColor cellColor = null)
         {
-            PdfPCell cell = new PdfPCell(new Phrase(text));
+            PdfPCell cell = new PdfPCell(new Phrase(cellText));
             cell.Colspan = colspan;
-            cell.HorizontalAlignment = aligment;
-            if (isHeader)
+            cell.HorizontalAlignment = (int)textAlingment;
+            if (cellColor != null)
             {
-                //cell.BackgroundColor = new Color(0, 150, 0);
+                cell.BackgroundColor = cellColor;
             }
-            reportTable.AddCell(cell);
+            table.AddCell(cell);
         }
 
         public static void AddParagraph(Document doc, int alignment, iTextSharp.text.Font font, iTextSharp.text.IElement content)
