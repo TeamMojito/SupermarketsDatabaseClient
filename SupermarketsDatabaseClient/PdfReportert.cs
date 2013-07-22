@@ -30,9 +30,6 @@ namespace SupermarketsDatabaseClient
             pdfReport.Open();
             using (pdfReport)
             {
-                //AddParagraph(pdfReport, iTextSharp.text.Element.ALIGN_CENTER, 
-                //    new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, BaseColor.BLACK),
-                //    new Chunk("\n\n\nWhat kind of paper is the best for making paper airplanes?\n\n\n\n\n")); 
                 PdfPTable reportTable = new PdfPTable(5);
 
                 AddCellToTable(reportTable, "Aggregated Sales Report", TextAlign.Center, 5);
@@ -84,7 +81,8 @@ namespace SupermarketsDatabaseClient
 
         private static void AddHeader(PdfPTable reportTable, DateTime currentDate, BaseColor headerColor)
         {
-            AddCellToTable(table: reportTable, cellText: "Date: " + currentDate.ToString(), textAlingment: TextAlign.Left, colspan:5, cellColor:headerColor);
+            AddCellToTable(table: reportTable, cellText: "Date: " + currentDate.ToString(), textAlingment: TextAlign.Left,
+                colspan:5, cellColor:headerColor);
             AddCellToTable(table: reportTable, cellText: "Product", textAlingment: TextAlign.Left, cellColor: headerColor);
             AddCellToTable(table: reportTable, cellText: "Quantity", textAlingment: TextAlign.Left, cellColor: headerColor);
             AddCellToTable(table: reportTable, cellText: "Unit Price", textAlingment: TextAlign.Left, cellColor: headerColor);
