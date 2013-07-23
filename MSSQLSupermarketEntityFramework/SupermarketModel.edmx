@@ -6,10 +6,15 @@
     <edmx:StorageModels>
       <Schema Namespace="SupermarketModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="SupermarketModelStoreContainer">
+          <EntitySet Name="Expenses" EntityType="SupermarketModel.Store.Expenses" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Measures" EntityType="SupermarketModel.Store.Measures" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Products" EntityType="SupermarketModel.Store.Products" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Reports" EntityType="SupermarketModel.Store.Reports" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Vendors" EntityType="SupermarketModel.Store.Vendors" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Expenses_Vendors" Association="SupermarketModel.Store.FK_Expenses_Vendors">
+            <End Role="Vendors" EntitySet="Vendors" />
+            <End Role="Expenses" EntitySet="Expenses" />
+          </AssociationSet>
           <AssociationSet Name="FK_Products_Measures" Association="SupermarketModel.Store.FK_Products_Measures">
             <End Role="Measures" EntitySet="Measures" />
             <End Role="Products" EntitySet="Products" />
@@ -23,6 +28,15 @@
             <End Role="Reports" EntitySet="Reports" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Expenses">
+          <Key>
+            <PropertyRef Name="ExpenseId" />
+          </Key>
+          <Property Name="ExpenseId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="VendorId" Type="int" Nullable="false" />
+          <Property Name="Month" Type="date" Nullable="false" />
+          <Property Name="Sum" Type="money" Nullable="false" />
+        </EntityType>
         <EntityType Name="Measures">
           <Key>
             <PropertyRef Name="MeasureId" />
@@ -57,8 +71,20 @@
             <PropertyRef Name="VendorId" />
           </Key>
           <Property Name="VendorId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="VendorName" Type="nchar" Nullable="false" MaxLength="50" />
+          <Property Name="VendorName" Type="nvarchar" Nullable="false" MaxLength="50" />
         </EntityType>
+        <Association Name="FK_Expenses_Vendors">
+          <End Role="Vendors" Type="SupermarketModel.Store.Vendors" Multiplicity="1" />
+          <End Role="Expenses" Type="SupermarketModel.Store.Expenses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendors">
+              <PropertyRef Name="VendorId" />
+            </Principal>
+            <Dependent Role="Expenses">
+              <PropertyRef Name="VendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Products_Measures">
           <End Role="Measures" Type="SupermarketModel.Store.Measures" Multiplicity="1" />
           <End Role="Products" Type="SupermarketModel.Store.Products" Multiplicity="*" />
@@ -95,16 +121,52 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="fn_diagramobjects" ReturnType="int" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SupermarketModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="SupermarketEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Expenses" EntityType="SupermarketModel.Expens" />
           <EntitySet Name="Measures" EntityType="SupermarketModel.Measure" />
           <EntitySet Name="Products" EntityType="SupermarketModel.Product" />
           <EntitySet Name="Reports" EntityType="SupermarketModel.Report" />
           <EntitySet Name="Vendors" EntityType="SupermarketModel.Vendor" />
+          <AssociationSet Name="FK_Expenses_Vendors" Association="SupermarketModel.FK_Expenses_Vendors">
+            <End Role="Vendors" EntitySet="Vendors" />
+            <End Role="Expenses" EntitySet="Expenses" />
+          </AssociationSet>
           <AssociationSet Name="FK_Products_Measures" Association="SupermarketModel.FK_Products_Measures">
             <End Role="Measures" EntitySet="Measures" />
             <End Role="Products" EntitySet="Products" />
@@ -117,7 +179,47 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="Reports" EntitySet="Reports" />
           </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SupermarketModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SupermarketModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
+        <EntityType Name="Expens">
+          <Key>
+            <PropertyRef Name="ExpenseId" />
+          </Key>
+          <Property Name="ExpenseId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="VendorId" Type="Int32" Nullable="false" />
+          <Property Name="Month" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Sum" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <NavigationProperty Name="Vendor" Relationship="SupermarketModel.FK_Expenses_Vendors" FromRole="Expenses" ToRole="Vendors" />
+        </EntityType>
         <EntityType Name="Measure">
           <Key>
             <PropertyRef Name="MeasureId" />
@@ -157,9 +259,22 @@
             <PropertyRef Name="VendorId" />
           </Key>
           <Property Name="VendorId" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
-          <Property Name="VendorName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="true" />
+          <Property Name="VendorName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Expenses" Relationship="SupermarketModel.FK_Expenses_Vendors" FromRole="Vendors" ToRole="Expenses" />
           <NavigationProperty Name="Products" Relationship="SupermarketModel.FK_Products_Vendors" FromRole="Vendors" ToRole="Products" />
         </EntityType>
+        <Association Name="FK_Expenses_Vendors">
+          <End Role="Vendors" Type="SupermarketModel.Vendor" Multiplicity="1" />
+          <End Role="Expenses" Type="SupermarketModel.Expens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendors">
+              <PropertyRef Name="VendorId" />
+            </Principal>
+            <Dependent Role="Expenses">
+              <PropertyRef Name="VendorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Products_Measures">
           <End Role="Measures" Type="SupermarketModel.Measure" Multiplicity="1" />
           <End Role="Products" Type="SupermarketModel.Product" Multiplicity="*" />
@@ -196,12 +311,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="SupermarketModelStoreContainer" CdmEntityContainer="SupermarketEntities">
+          <EntitySetMapping Name="Expenses">
+            <EntityTypeMapping TypeName="SupermarketModel.Expens">
+              <MappingFragment StoreEntitySet="Expenses">
+                <ScalarProperty Name="ExpenseId" ColumnName="ExpenseId" />
+                <ScalarProperty Name="VendorId" ColumnName="VendorId" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Sum" ColumnName="Sum" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Measures">
             <EntityTypeMapping TypeName="SupermarketModel.Measure">
               <MappingFragment StoreEntitySet="Measures">
@@ -242,6 +378,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="SupermarketModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="SupermarketModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="SupermarketModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="SupermarketModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="SupermarketModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SupermarketModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="SupermarketModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="SupermarketModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

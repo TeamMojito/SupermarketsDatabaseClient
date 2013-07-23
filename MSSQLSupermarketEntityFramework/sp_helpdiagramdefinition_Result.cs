@@ -10,20 +10,10 @@
 namespace MSSQLSupermarketEntityFramework
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Vendor
+    public partial class sp_helpdiagramdefinition_Result
     {
-        public Vendor()
-        {
-            this.Expenses = new HashSet<Expens>();
-            this.Products = new HashSet<Product>();
-        }
-    
-        public int VendorId { get; set; }
-        public string VendorName { get; set; }
-    
-        public virtual ICollection<Expens> Expenses { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

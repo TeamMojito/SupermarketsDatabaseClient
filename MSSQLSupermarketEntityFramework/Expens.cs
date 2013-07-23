@@ -12,18 +12,13 @@ namespace MSSQLSupermarketEntityFramework
     using System;
     using System.Collections.Generic;
     
-    public partial class Vendor
+    public partial class Expens
     {
-        public Vendor()
-        {
-            this.Expenses = new HashSet<Expens>();
-            this.Products = new HashSet<Product>();
-        }
-    
+        public int ExpenseId { get; set; }
         public int VendorId { get; set; }
-        public string VendorName { get; set; }
+        public System.DateTime Month { get; set; }
+        public decimal Sum { get; set; }
     
-        public virtual ICollection<Expens> Expenses { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual Vendor Vendor { get; set; }
     }
 }

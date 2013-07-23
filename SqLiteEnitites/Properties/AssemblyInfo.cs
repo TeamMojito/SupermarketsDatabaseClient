@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MSSQLSupermarketEntityFramework")]
+[assembly: AssemblyTitle("SqLiteEnitites")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MSSQLSupermarketEntityFramework")]
+[assembly: AssemblyProduct("SqLiteEnitites")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("228ad0a2-1f22-450d-a649-2dce4c5cf633")]
+[assembly: Guid("2809083d-a798-4389-81be-5d26e0cd3852")]
 
 // Version information for an assembly consists of the following four values:
 //

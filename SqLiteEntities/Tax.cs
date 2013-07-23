@@ -7,23 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MSSQLSupermarketEntityFramework
+namespace SqLiteEntities
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Vendor
+    public partial class Tax
     {
-        public Vendor()
-        {
-            this.Expenses = new HashSet<Expens>();
-            this.Products = new HashSet<Product>();
-        }
-    
-        public int VendorId { get; set; }
-        public string VendorName { get; set; }
-    
-        public virtual ICollection<Expens> Expenses { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
+        public long TaxProcent { get; set; }
     }
 }

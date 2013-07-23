@@ -1,25 +1,30 @@
 ﻿namespace SupermarketsDatabaseClient
 {
     using System;
-    using System.IO;
+    using System.Globalization;
     using System.Linq;
+    using System.Threading;
+    using ExtractExcelReportsFromZip;
     using MSSQLSupermarketEntityFramework;
     using OpenAccessMySqlSupermarketEntityModel;
-    using iTextSharp.text;
-    using iTextSharp.text.pdf;
 
     class Program
     {
         static void Main()
         {
+            //Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             //MigrateDataFromMySqlToMSSqlServer();
             //ZipExtractor zipExtractor = new ZipExtractor(@"D:\Trash\Sample-Sales-Reports.zip");
             //var directory = zipExtractor.ExtractContentTo(@"..\..\temp\");
             //ExcelToMySqlParser excelToMySqlParser = new ExcelToMySqlParser(@"..\..\temp\");
             //excelToMySqlParser.ReadFilesFromExcel();
             //zipExtractor.RemoveExtractedDirectory(directory);
-            PdfReportert.CreateReport();
-            XmlGenerator.GenerateXmlByVendors();
+            //PdfReportert.CreateReport();
+            //XmlGenerator.GenerateXmlByVendors();
+            //MongoDBConnector.CreateProductsReportData("mongodb://localhost/");
+            //XmlToMongoDbAndSqlServer.SaveToMongoDb("mongodb://localhost/", @"D:\Projects\TeamMojito\SupermarketsDatabaseClient\Vendors-Expenses.xml");
+            //XmlToMongoDbAndSqlServer.SaveToMSSqlServer(@"D:\Projects\TeamMojito\SupermarketsDatabaseClient\Vendors-Expenses.xml");
+            VendorsTotalReport.SomeMethod("mongodb://localhost/");
         }
 
         public static void MigrateDataFromMySqlToMSSqlServer()
